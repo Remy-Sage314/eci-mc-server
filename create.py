@@ -31,7 +31,7 @@ container = CreateContainerGroupRequestContainer(
     volume_mount=[volume_mount],
     image_pull_policy='IfNotPresent',
     name='container-mc',
-    image='registry-vpc.cn-hangzhou.aliyuncs.com/bmzhk/mc:2',
+    image='registry-vpc.cn-hangzhou.aliyuncs.com/bmzhk/mc:BMC3_Server_Pack_v29.5',
     cpu=2,
     memory=8
 )

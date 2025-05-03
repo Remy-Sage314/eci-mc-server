@@ -1,4 +1,4 @@
-FROM eclipse-temurin:18 as jre-build
+FROM eclipse-temurin:21 AS jre-build
 
 RUN $JAVA_HOME/bin/jlink \
          --add-modules ALL-MODULE-PATH \
@@ -9,9 +9,9 @@ RUN $JAVA_HOME/bin/jlink \
          --output /javaruntime
 
 
-FROM python:3.11-slim-bookworm
+FROM python:3.13-slim-bookworm
 ENV JAVA_HOME=/opt/java/openjdk
-ENV PATH "${JAVA_HOME}/bin:${PATH}"
+ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY --from=jre-build /javaruntime $JAVA_HOME
 
 RUN pip install alibabacloud-eci20180808 Flask rcon
