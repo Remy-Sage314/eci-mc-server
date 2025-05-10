@@ -1,14 +1,13 @@
-#!/home/happy68/.virtualenvs/a/bin/python3
+import alibabacloud_eci20180808.client
 from alibabacloud_eci20180808.models import (
     CreateContainerGroupRequest, CreateContainerGroupRequestContainer,
     CreateContainerGroupRequestContainerReadinessProbe,
     CreateContainerGroupRequestContainerReadinessProbeHttpGet,
     CreateContainerGroupRequestContainerVolumeMount,
     CreateContainerGroupRequestVolume,
-    CreateContainerGroupRequestVolumeNFSVolume
+    CreateContainerGroupRequestVolumeNFSVolume,
+    DescribeContainerGroupsRequest
 )
-
-from utils import get_eci_client
 
 http_get = CreateContainerGroupRequestContainerReadinessProbeHttpGet(
     scheme='HTTP',
@@ -45,7 +44,7 @@ volume = CreateContainerGroupRequestVolume(
     nfsvolume=nfs_volume,
     name='nas-mc'
 )
-request = CreateContainerGroupRequest(
+create_request = CreateContainerGroupRequest(
     region_id='cn-hangzhou',
     zone_id='cn-hangzhou-k',
     security_group_id='sg-bp17z1tqsnklf5c5n7d0',
@@ -62,10 +61,21 @@ request = CreateContainerGroupRequest(
     container=[container],
     volume=[volume],
     spot_duration=1,
+    ram_role_name='EciManagerRole',
     dry_run=False  # 是否预检
 )
+query_request = DescribeContainerGroupsRequest(region_id='cn-hangzhou', container_group_name='mc-container-group')
 
-if __name__ == '__main__':
-    client = get_eci_client()
-    response = client.create_container_group(request)
-    print(response.body.container_group_id)
+def query_exists(client: alibabacloud_eci20180808.client.Client):
+    response = client.describe_container_groups(query_request)
+    for container_group in response.body.container_groups:
+        if container_group.status  == 'Running' or container_group.status  == 'Pending':
+            return True
+    return False
+
+
+def create_container_group(client: alibabacloud_eci20180808.client.Client, force=False):
+    if not query_exists(client) or force:
+        response = client.create_container_group(create_request)
+        return response.status_code
+    return 400

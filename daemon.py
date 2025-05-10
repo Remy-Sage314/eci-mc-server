@@ -6,11 +6,10 @@ import json
 import time
 import subprocess
 import os
-import urllib
+import urllib.parse
 import threading
 import shlex
 
-import requests
 from flask import Flask
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest
 
@@ -94,8 +93,6 @@ if __name__ == "__main__":
                              stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                              stdin=subprocess.DEVNULL)
         # 更新dns
-        if not Debug:
-            ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
-            requests.get(f'http://dynv6.com/api/update?hostname={Domain}&token={DYNV6Token}&ipv4={ip}')
+        setup_dns()
         t = threading.Thread(target=wait)
         app.run(port=25585, host="0.0.0.0", debug=False)  # debug必须为False

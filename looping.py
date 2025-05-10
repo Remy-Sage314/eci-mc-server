@@ -2,7 +2,6 @@
 import time
 from datetime import datetime, timezone
 
-import requests
 from alibabacloud_eci20180808.models import DescribeContainerGroupsRequest
 import rcon.exceptions
 
@@ -16,6 +15,7 @@ request = DescribeContainerGroupsRequest(region_id=RegionId, container_group_ids
 eci_client = get_eci_client()
 n = 0
 messages = []
+is_not_anyone_online = None
 
 
 def send(msg):
@@ -58,5 +58,6 @@ while True:
         if n >= 15:
             rcon_client.close()
             requests.get("http://localhost:25585/stop_mc")
+            break
 
     time.sleep(20)
