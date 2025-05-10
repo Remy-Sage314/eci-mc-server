@@ -2,10 +2,17 @@ from time import sleep
 
 from rcon.source import Client
 import requests
+
 from alibabacloud_tea_openapi import models as open_api_models
-from alibabacloud_eci20180808.client import Client as Eci20180808Client
 from alibabacloud_credentials.client import Client as CredClient
 from alibabacloud_credentials.models import Config as CredConfig
+
+from alibabacloud_eci20180808.client import Client as Eci20180808Client
+from alibabacloud_sts20150401.client import Client as Sts20150401Client
+from alibabacloud_alidns20150109.client import Client as DNSClient
+
+from alibabacloud_sts20150401 import models as sts_models
+from alibabacloud_alidns20150109 import models as dns_models
 
 from config import *
 
@@ -21,13 +28,12 @@ def get_rcon_client():
     return client
 
 
-def get_eci_client(ak_id=None, ak_secret=None):
+def get_aliyun_client(client_type, ak_id=None, ak_secret=None):
     if ak_id and ak_secret:
         config = open_api_models.Config(
             access_key_id=ak_id,
             access_key_secret=ak_secret,
             region_id=RegionId,
-            endpoint=EndPoint
         )
     else:
         credentials_config = CredConfig(
@@ -38,13 +44,50 @@ def get_eci_client(ak_id=None, ak_secret=None):
         config = open_api_models.Config(
             credential=credentials_client,
             region_id=RegionId,
-            endpoint=EndPoint
         )
-
-    eci_client = Eci20180808Client(config)
-    return eci_client
+    match client_type:
+        case 'eci':
+            config.endpoint = ECIEndPoint
+            return Eci20180808Client(config)
+        case 'sts':
+            config.endpoint = STSEndPoint
+            return Sts20150401Client(config)
+        case 'dns':
+            config.endpoint = DNSEndPoint
+            return DNSClient(config)
+        case _:
+            raise ValueError('Unknown client type')
 
 
 def setup_dns():
     ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
-    requests.get(f'http://dynv6.com/api/update?hostname={Domain}&token={DYNV6Token}&ipv4={ip}')
+    # dynv6
+    status = requests.get(f'http://dynv6.com/api/update?hostname={DYNV6Domain}&token={DYNV6Token}&ipv4={ip}')
+    if status.status_code == 200:
+        print('dynv6 update successfully')
+
+    # aliyun
+    try:
+        sts_client = get_aliyun_client('sts')
+        assumerole_request = sts_models.AssumeRoleRequest(
+            role_session_name='Eci',
+            role_arn=DnsRoleARN,
+            duration_seconds=120
+        )
+        res = sts_client.assume_role(assumerole_request).body.credentials
+        ak_id = res.access_key_id
+        ak_secret = res.access_key_secret
+
+        dns_client = get_aliyun_client('dns', ak_id, ak_secret)
+        update_domain_record_request = dns_models.UpdateDomainRecordRequest(
+            record_id=DnsRecordID,
+            rr='@',
+            value=ip,
+            type='A'
+        )
+        status = dns_client.update_domain_record(update_domain_record_request).status_code
+    except Exception as e:
+        print(e)
+    else:
+        if status == 200:
+            print('aliyun dns update successfully')

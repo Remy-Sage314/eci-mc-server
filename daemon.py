@@ -74,7 +74,7 @@ def stop():
 def delete_container_group():
     instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
     request = DeleteContainerGroupRequest(region_id=RegionId, container_group_id=instance_id)
-    client = get_eci_client()
+    client = get_aliyun_client('eci')
     return str(client.delete_container_group(request).status_code)
 
 
