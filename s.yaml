@@ -1,0 +1,49 @@
+edition: 3.0.0
+name: fc3-example
+access: administrator
+resources:
+  fcDemo:
+    component: fc3
+    props:
+      region: cn-hangzhou
+      code: .
+      handler: index.handler
+      role: acs:ram::1069036459691773:role/ecimanagerrole
+      disableOndemand: false
+      description: ''
+      timeout: 20
+      diskSize: 512
+      internetAccess: false
+      logConfig:
+        enableRequestMetrics: true
+        enableInstanceMetrics: true
+        logBeginRule: DefaultRegex
+        project: serverless-cn-hangzhou-ce6521d9-1230-5999-8bdd-6dd9c8fb1605
+        logstore: default-logs
+      functionName: manage_mc_eci
+      runtime: custom-container
+      cpu: 0.05
+      customContainerConfig:
+        image: registry-vpc.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest
+        port: 8000
+        entrypoint:
+          - python3
+          - app.py
+      instanceConcurrency: 2
+      memorySize: 128
+      vpcConfig:
+        securityGroupId: sg-bp13bepb4rf7dhnjfkd2
+        vpcId: vpc-bp1utafm6y6ahi480t3v7
+        vSwitchIds:
+          - vsw-bp19befc46buz5uuxg40i
+      triggers:
+        - triggerConfig:
+            methods:
+              - POST
+              - GET
+            authType: anonymous
+            disableURLInternet: false
+          triggerName: defaultTrigger
+          description: ''
+          qualifier: LATEST
+          triggerType: http

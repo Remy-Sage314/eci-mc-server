@@ -28,11 +28,12 @@ def get_rcon_client():
     return client
 
 
-def get_aliyun_client(client_type, ak_id=None, ak_secret=None):
+def get_aliyun_client(client_type, ak_id=None, ak_secret=None, security_token=None):
     if ak_id and ak_secret:
         config = open_api_models.Config(
             access_key_id=ak_id,
             access_key_secret=ak_secret,
+            security_token=security_token,
             region_id=RegionId,
         )
     else:
@@ -75,10 +76,8 @@ def setup_dns():
             duration_seconds=120
         )
         res = sts_client.assume_role(assumerole_request).body.credentials
-        ak_id = res.access_key_id
-        ak_secret = res.access_key_secret
 
-        dns_client = get_aliyun_client('dns', ak_id, ak_secret)
+        dns_client = get_aliyun_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
         update_domain_record_request = dns_models.UpdateDomainRecordRequest(
             record_id=DnsRecordID,
             rr='@',
