@@ -17,13 +17,7 @@ app = Flask(__name__)
 @app.route("/send/<string:message>")
 def send(message):
     """发送钉钉消息"""
-    status = 200
-    if EnableDingtalk:
-        if EnableDingtalkEnterprise:
-            status = send_dingtalk_message_enterprise(message)
-        else:
-            status = send_dingtalk_message(message)
-    return Response(status=status)
+    return Response(status=send_dingtalk_message(message))
 
 
 def wait():

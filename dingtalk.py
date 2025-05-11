@@ -1,5 +1,3 @@
-from alibabacloud_tea_util import models as util_models
-
 import base64
 import hashlib
 import hmac
@@ -9,8 +7,9 @@ import urllib.parse
 
 from utils import *
 
-def get_sign():
-    timestamp = str(round(time.time() * 1000))
+def get_sign(timestamp=None):
+    if not timestamp:
+        timestamp = str(round(time.time() * 1000))
     secret = DingtalkSecret
     secret_enc = secret.encode('utf-8')
     string_to_sign = '{}\n{}'.format(timestamp, secret)
@@ -18,22 +17,20 @@ def get_sign():
     hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
     return base64.b64encode(hmac_code).decode('utf-8')
 def send_dingtalk_message(message):
-    timestamp = str(round(time.time() * 1000))
-    sign = urllib.parse.quote_plus(get_sign())
-    url = (RobotUrl +
-           r"&timestamp=" + timestamp +
-           r"&sign=" + sign)
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    data = {
-        'msgtype': 'text',
-        'text': {
-            'content': message
+    if EnableDingtalk :
+        timestamp = str(round(time.time() * 1000))
+        sign = urllib.parse.quote_plus(get_sign())
+        url = (RobotUrl +
+               r"&timestamp=" + timestamp +
+               r"&sign=" + sign)
+        headers = {
+            'Content-Type': 'application/json'
         }
-    }
-    return requests.post(url, headers=headers, data=json.dumps(data)).status_code
-
-
-
-send_dingtalk_message("测试")
+        data = {
+            'msgtype': 'text',
+            'text': {
+                'content': message
+            }
+        }
+        return requests.post(url, headers=headers, data=json.dumps(data)).status_code
+    return 200

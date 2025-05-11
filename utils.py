@@ -10,13 +10,9 @@ from alibabacloud_credentials.models import Config as CredConfig
 from alibabacloud_eci20180808.client import Client as Eci20180808Client
 from alibabacloud_sts20150401.client import Client as Sts20150401Client
 from alibabacloud_alidns20150109.client import Client as DNSClient
-from alibabacloud_dingtalk.robot_1_0.client import Client as DingtalkRobotClient
-from alibabacloud_dingtalk.oauth2_1_0.client import Client as DingtalkOauthClient
 
 from alibabacloud_sts20150401 import models as sts_models
 from alibabacloud_alidns20150109 import models as dns_models
-from alibabacloud_dingtalk.robot_1_0 import models as ding_robot_models
-from alibabacloud_dingtalk.oauth2_1_0 import models as ding_oauth_models
 
 
 from config import *

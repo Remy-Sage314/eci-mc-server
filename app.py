@@ -1,8 +1,10 @@
 import logging
+import time
 
 from flask import request, Flask, Response
 import create
 import utils
+from dingtalk import get_sign
 
 app = Flask(__name__)
 
@@ -17,12 +19,16 @@ def start():
     status = create.create_container_group(client, force)
     return Response(status=status)
 
-@app.route('/start')
+@app.route('/stop')
 def stop():
     ...
 
-@app.route('/dingtalk', methods=['POST'])
-def dingtalk():
+@app.route('ding_receive', methods=['POST'])
+def receive_dingtalk():
+    now = round(time.time() * 1000)
+    timestamp = request.headers['timestamp']
+    if get_sign(timestamp) != request.headers['sign'] or (abs(int(timestamp) - now)) > 600000:
+        return Response(status=403)
     msg = request.json['text']
     if '开' in msg:
         return start()
