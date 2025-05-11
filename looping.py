@@ -12,7 +12,7 @@ requests.get("http://localhost:25585/send/MC服务器已启动")
 
 instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
 request = DescribeContainerGroupsRequest(region_id=RegionId, container_group_ids=f'["{instance_id}"]', with_event=True)
-eci_client = get_aliyun_client('eci')
+eci_client = get_ali_client('eci')
 n = 0
 messages = []
 is_not_anyone_online = None
@@ -49,7 +49,6 @@ while True:
             requests.get("http://localhost:25585/delete")
         else:
             send('rcon异常，自动关闭功能失效，MC服务器仍在运行，请手动介入')
-        sleep(10)
         break
     else:
         if is_not_anyone_online:
@@ -63,3 +62,6 @@ while True:
             break
 
     time.sleep(20)
+
+while True:
+    time.sleep(60)

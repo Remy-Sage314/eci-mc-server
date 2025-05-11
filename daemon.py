@@ -1,45 +1,29 @@
 # -*- coding: utf-8 -*-
-import base64
-import hashlib
-import hmac
-import json
 import time
 import subprocess
 import os
-import urllib.parse
 import threading
 import shlex
 
-from flask import Flask
+from flask import Flask, Response
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest
 
 from utils import *
+from dingtalk import *
 
 app = Flask(__name__)
 
 
 @app.route("/send/<string:message>")
-def send_dingtalk_message(message):
-    timestamp = str(round(time.time() * 1000))
-    secret = DingtalkSecret
-    secret_enc = secret.encode('utf-8')
-    string_to_sign = '{}\n{}'.format(timestamp, secret)
-    string_to_sign_enc = string_to_sign.encode('utf-8')
-    hmac_code = hmac.new(secret_enc, string_to_sign_enc, digestmod=hashlib.sha256).digest()
-    sign = urllib.parse.quote_plus(base64.b64encode(hmac_code))
-    url = (RobotUrl +
-           r"&timestamp=" + timestamp +
-           r"&sign=" + sign)
-    headers = {
-        'Content-Type': 'application/json'
-    }
-    data = {
-        'msgtype': 'text',
-        'text': {
-            'content': message
-        }
-    }
-    return str(requests.post(url, headers=headers, data=json.dumps(data)).status_code)
+def send(message):
+    """发送钉钉消息"""
+    status = 200
+    if EnableDingtalk:
+        if EnableDingtalkEnterprise:
+            status = send_dingtalk_message_enterprise(message)
+        else:
+            status = send_dingtalk_message(message)
+    return Response(status=status)
 
 
 def wait():
@@ -74,7 +58,7 @@ def stop():
 def delete_container_group():
     instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
     request = DeleteContainerGroupRequest(region_id=RegionId, container_group_id=instance_id)
-    client = get_aliyun_client('eci')
+    client = get_ali_client('eci')
     return str(client.delete_container_group(request).status_code)
 
 

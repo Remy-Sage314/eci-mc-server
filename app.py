@@ -13,9 +13,24 @@ def start():
     security_token = request.headers['x-fc-security-token']
     force = request.args.get('force')
     print(ak_id, ak_secret, security_token)
-    client = utils.get_aliyun_client('eci', ak_id, ak_secret, security_token)
+    client = utils.get_ali_client('eci', ak_id, ak_secret, security_token)
     status = create.create_container_group(client, force)
     return Response(status=status)
+
+@app.route('/start')
+def stop():
+    ...
+
+@app.route('/dingtalk', methods=['POST'])
+def dingtalk():
+    msg = request.json['text']
+    if '开' in msg:
+        return start()
+    elif '关' in msg:
+        return stop()
+    else:
+        return Response(status=400)
+
 
 if __name__ == '__main__':
     app.logger.setLevel(logging.DEBUG)

@@ -10,9 +10,14 @@ from alibabacloud_credentials.models import Config as CredConfig
 from alibabacloud_eci20180808.client import Client as Eci20180808Client
 from alibabacloud_sts20150401.client import Client as Sts20150401Client
 from alibabacloud_alidns20150109.client import Client as DNSClient
+from alibabacloud_dingtalk.robot_1_0.client import Client as DingtalkRobotClient
+from alibabacloud_dingtalk.oauth2_1_0.client import Client as DingtalkOauthClient
 
 from alibabacloud_sts20150401 import models as sts_models
 from alibabacloud_alidns20150109 import models as dns_models
+from alibabacloud_dingtalk.robot_1_0 import models as ding_robot_models
+from alibabacloud_dingtalk.oauth2_1_0 import models as ding_oauth_models
+
 
 from config import *
 
@@ -28,7 +33,19 @@ def get_rcon_client():
     return client
 
 
-def get_aliyun_client(client_type, ak_id=None, ak_secret=None, security_token=None):
+DingtalkAK = None
+def get_dingtalk_ak():
+    global DingtalkAK
+    if not DingtalkAK:
+        client = get_ali_client('dingtalk_oauth')
+        get_access_token_request = ding_oauth_models.GetAccessTokenRequest(
+            app_key=DingtalkClientID,
+            app_secret=DingtalkClientSecret
+        )
+        DingtalkAK = client.get_access_token(get_access_token_request).body.access_token
+    return DingtalkAK
+
+def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None):
     if ak_id and ak_secret:
         config = open_api_models.Config(
             access_key_id=ak_id,
@@ -46,6 +63,12 @@ def get_aliyun_client(client_type, ak_id=None, ak_secret=None, security_token=No
             credential=credentials_client,
             region_id=RegionId,
         )
+
+    if client_type.startswith('dingtalk'):
+        config.credential = None
+        config.protocol = 'https'
+        config.region_id = 'central'
+
     match client_type:
         case 'eci':
             config.endpoint = ECIEndPoint
@@ -56,6 +79,10 @@ def get_aliyun_client(client_type, ak_id=None, ak_secret=None, security_token=No
         case 'dns':
             config.endpoint = DNSEndPoint
             return DNSClient(config)
+        case 'dingtalk_robot':
+            return DingtalkRobotClient(config)
+        case 'dingtalk_oauth':
+            return DingtalkOauthClient(config)
         case _:
             raise ValueError('Unknown client type')
 
@@ -69,15 +96,14 @@ def setup_dns():
 
     # aliyun
     try:
-        sts_client = get_aliyun_client('sts')
+        sts_client = get_ali_client('sts')
         assumerole_request = sts_models.AssumeRoleRequest(
             role_session_name='Eci',
-            role_arn=DnsRoleARN,
-            duration_seconds=120
+            role_arn=DnsRoleARN
         )
         res = sts_client.assume_role(assumerole_request).body.credentials
 
-        dns_client = get_aliyun_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
+        dns_client = get_ali_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
         update_domain_record_request = dns_models.UpdateDomainRecordRequest(
             record_id=DnsRecordID,
             rr='@',

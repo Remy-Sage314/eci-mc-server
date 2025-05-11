@@ -20,9 +20,9 @@ readiness_probe = CreateContainerGroupRequestContainerReadinessProbe(
     period_seconds=60
 )
 volume_mount = CreateContainerGroupRequestContainerVolumeMount(
-    mount_path='opt/mc',
+    mount_path='opt/mc/server',
     read_only=False,
-    sub_path='mc/',
+    sub_path='mc/server',
     name='nas-mc'
 )
 container = CreateContainerGroupRequestContainer(

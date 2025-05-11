@@ -14,7 +14,7 @@ ENV JAVA_HOME=/opt/java/openjdk
 ENV PATH="${JAVA_HOME}/bin:${PATH}"
 COPY --from=jre-build /javaruntime $JAVA_HOME
 
-RUN pip install alibabacloud-eci20180808 Flask rcon alibabacloud_sts20150401 alibabacloud_alidns20150109
+RUN pip install alibabacloud-eci20180808 Flask rcon alibabacloud_sts20150401 alibabacloud_alidns20150109 alibabacloud_dingtalk
 COPY . /opt/mc/scripts/
 WORKDIR /opt/mc/scripts/
 CMD python /opt/mc/scripts/daemon.py && python /opt/mc/scripts/looping.py
