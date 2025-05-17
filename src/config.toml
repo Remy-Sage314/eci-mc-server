@@ -1,8 +1,0 @@
-[bot]
-plugin_dirs = ["plugins"]
-#adapters = ["alicebot.Adapter.dingtalk"]
-
-[adapter.dingtalk]
-app_secret = "dingsb26kknkq82tpysc"
-port = 9000
-host = "0.0.0.0"
