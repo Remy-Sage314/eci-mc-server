@@ -3,20 +3,6 @@ from time import sleep
 from rcon.source import Client
 import requests
 
-from alibabacloud_tea_openapi import models as open_api_models
-from alibabacloud_credentials.client import Client as CredClient
-from alibabacloud_credentials.models import Config as CredConfig
-
-from alibabacloud_eci20180808.client import Client as Eci20180808Client
-from alibabacloud_sts20150401.client import Client as Sts20150401Client
-from alibabacloud_alidns20150109.client import Client as DNSClient
-
-from alibabacloud_sts20150401 import models as sts_models
-from alibabacloud_alidns20150109 import models as dns_models
-
-
-from config import *
-
 
 def get_rcon_client():
     client = Client('127.0.0.1', 25575, passwd=RconPassword)
@@ -43,6 +29,7 @@ def get_dingtalk_ak():
 
 def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None):
     if ak_id and ak_secret:
+        from alibabacloud_tea_openapi import models as open_api_models
         config = open_api_models.Config(
             access_key_id=ak_id,
             access_key_secret=ak_secret,
@@ -50,6 +37,8 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
             region_id=RegionId,
         )
     else:
+        from alibabacloud_credentials.client import Client as CredClient
+        from alibabacloud_credentials.models import Config as CredConfig
         credentials_config = CredConfig(
             type='ecs_ram_role',  # 凭证类型。
             role_name='EciManagerRole'
@@ -67,18 +56,18 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
 
     match client_type:
         case 'eci':
+            from alibabacloud_eci20180808.client import Client as Eci20180808Client
             config.endpoint = ECIEndPoint
             return Eci20180808Client(config)
         case 'sts':
+            from alibabacloud_sts20150401.client import Client as Sts20150401Client
             config.endpoint = STSEndPoint
             return Sts20150401Client(config)
         case 'dns':
+            from alibabacloud_alidns20150109.client import Client as DNSClient
             config.endpoint = DNSEndPoint
             return DNSClient(config)
-        case 'dingtalk_robot':
-            return DingtalkRobotClient(config)
-        case 'dingtalk_oauth':
-            return DingtalkOauthClient(config)
+
         case _:
             raise ValueError('Unknown client type')
 
@@ -92,6 +81,7 @@ def setup_dns():
 
     # aliyun
     try:
+        from alibabacloud_sts20150401 import models as sts_models
         sts_client = get_ali_client('sts')
         assumerole_request = sts_models.AssumeRoleRequest(
             role_session_name='Eci',
@@ -99,6 +89,7 @@ def setup_dns():
         )
         res = sts_client.assume_role(assumerole_request).body.credentials
 
+        from alibabacloud_alidns20150109 import models as dns_models
         dns_client = get_ali_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
         update_domain_record_request = dns_models.UpdateDomainRecordRequest(
             record_id=DnsRecordID,

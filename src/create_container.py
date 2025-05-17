@@ -1,32 +1,20 @@
+import pathlib
+
 import alibabacloud_eci20180808.client
 from alibabacloud_eci20180808.models import (
     CreateContainerGroupRequest, CreateContainerGroupRequestContainer,
-    CreateContainerGroupRequestContainerReadinessProbe,
-    CreateContainerGroupRequestContainerReadinessProbeHttpGet,
     CreateContainerGroupRequestContainerVolumeMount,
     CreateContainerGroupRequestVolume,
     CreateContainerGroupRequestVolumeNFSVolume,
     DescribeContainerGroupsRequest
 )
 
-http_get = CreateContainerGroupRequestContainerReadinessProbeHttpGet(
-    scheme='HTTP',
-    path='/check',
-    port=25585
-)
-readiness_probe = CreateContainerGroupRequestContainerReadinessProbe(
-    http_get=http_get,
-    initial_delay_seconds=10,
-    period_seconds=60
-)
 volume_mount = CreateContainerGroupRequestContainerVolumeMount(
-    mount_path='opt/mc/server',
+    mount_path='data/current_server',
     read_only=False,
-    sub_path='mc/server',
     name='nas-mc'
 )
 container = CreateContainerGroupRequestContainer(
-    readiness_probe=readiness_probe,
     volume_mount=[volume_mount],
     image_pull_policy='IfNotPresent',
     name='container-mc',
@@ -74,7 +62,8 @@ def query_exists(client: alibabacloud_eci20180808.client.Client):
     return False
 
 
-def create_container_group(client: alibabacloud_eci20180808.client.Client, force=False):
+def create_container_group(client: alibabacloud_eci20180808.client.Client, nas_mc_path, force=False):
+    create_request.container[0].volume_mount[0].sub_path = nas_mc_path
     if not query_exists(client) or force:
         response = client.create_container_group(create_request)
         return response.status_code
