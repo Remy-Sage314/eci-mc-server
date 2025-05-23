@@ -8,16 +8,10 @@ import shlex
 from flask import Flask, Response
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest
 
-from utils import *
-from dingtalk import *
+from src.utils import *
 
 app = Flask(__name__)
 
-
-@app.route("/send/<string:message>")
-def send(message):
-    """发送钉钉消息"""
-    return Response(status=send_dingtalk_message(message))
 
 
 def wait():
@@ -67,7 +61,7 @@ if __name__ == "__main__":
     pid = os.fork()
     if pid == 0:
         # 启动mc
-        p = subprocess.Popen(shlex.split(Command), cwd=McDir, shell=False,
+        p = subprocess.Popen(shlex.split(Command), cwd='data/current_server', shell=False,
                              stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                              stdin=subprocess.DEVNULL)
         # 更新dns

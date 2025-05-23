@@ -1,0 +1,6 @@
+s layer publish --code layer/ --compatible-runtime custom.debian12 --layer-name dependency-layer --skip-actions
+pip install --target layer/python -r requirements.txt -U
+s logs --tail
+curl https://eci-mc-server-rlzbgtclfo.cn-hangzhou.fcapp.run
+
+from alibabacloud_alidns20150109 import models as alidns_20150109_models\r\nMemoryError"}
