@@ -1,5 +1,3 @@
-import pathlib
-
 import alibabacloud_eci20180808.client
 from alibabacloud_eci20180808.models import (
     CreateContainerGroupRequest, CreateContainerGroupRequestContainer,

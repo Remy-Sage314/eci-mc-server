@@ -3,6 +3,7 @@ import time
 from datetime import datetime, timezone
 
 from alibabacloud_eci20180808.models import DescribeContainerGroupsRequest
+import requests
 import rcon.exceptions
 
 from utils import *
