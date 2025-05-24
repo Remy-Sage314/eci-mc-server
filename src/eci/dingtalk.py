@@ -5,6 +5,9 @@ import json
 import time
 import urllib.parse
 
+import requests
+
+from config import *
 
 def get_sign(timestamp=None):
     if not timestamp:

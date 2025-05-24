@@ -8,7 +8,8 @@ from alibabacloud_eci20180808.models import (
 )
 
 volume_mount = CreateContainerGroupRequestContainerVolumeMount(
-    mount_path='data/current_server',
+    mount_path='/opt/mc/server',
+    sub_path='mc/server',
     read_only=False,
     name='nas-mc'
 )
@@ -60,8 +61,7 @@ def query_exists(client: alibabacloud_eci20180808.client.Client):
     return False
 
 
-def create_container_group(client: alibabacloud_eci20180808.client.Client, nas_mc_path, force=False):
-    create_request.container[0].volume_mount[0].sub_path = nas_mc_path
+def create_container_group(client: alibabacloud_eci20180808.client.Client, force=False):
     if not query_exists(client) or force:
         response = client.create_container_group(create_request)
         return response.status_code
