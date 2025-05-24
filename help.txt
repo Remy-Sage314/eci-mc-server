@@ -1,5 +1,5 @@
 s layer publish --code layer/ --compatible-runtime custom.debian12 --layer-name dependency-layer --skip-actions
-pip install --target layer/python -r requirements.txt -U
+pip install --target layer/python -r fc_requirements.txt -U
 s logs --tail
 curl https://eci-mc-server-rlzbgtclfo.cn-hangzhou.fcapp.run
 

@@ -1,4 +1,0 @@
-Flask
-rcon
-requests
-pydantic

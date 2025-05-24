@@ -10,16 +10,16 @@ resources:
       customRuntimeConfig:
         command:
           - python3
-          - app.py
+          - fc/app.py
         port: 9000
       description: ''
       disableOndemand: false
       diskSize: 512
       environmentVariables:
         LD_LIBRARY_PATH: >-
-          /code:/code/lib:/usr/local/lib:/opt/lib:/opt/php8.1/lib:/opt/php8.0/lib:/opt/php7.2/lib
+          /code:/code/lib:/usr/local/lib:/opt/lib
         PATH: >-
-          /opt/python3.12/bin:/usr/local/bin/apache-maven/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/ruby/bin:/opt/bin:/code:/code/bin
+          /opt/python3.12/bin:/usr/local/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/opt/bin:/code:/code/bin
         PYTHONPATH: /opt/python:/code
         TZ: Asia/Shanghai
       functionArn: acs:fc:cn-hangzhou:1069036459691773:functions/eci-mc-server
@@ -28,7 +28,7 @@ resources:
       instanceConcurrency: 10
       internetAccess: false
       layers:
-        - acs:fc:cn-hangzhou:1069036459691773:layers/dependency-layer/versions/8
+        - acs:fc:cn-hangzhou:1069036459691773:layers/dependency-layer/versions/10
         - acs:fc:cn-hangzhou:official:layers/Python312/versions/1
       logConfig:
         enableInstanceMetrics: true
@@ -37,13 +37,6 @@ resources:
         logstore: default-logs
         project: serverless-cn-hangzhou-ce6521d9-1230-5999-8bdd-6dd9c8fb1605
       memorySize: 192
-      nasConfig:
-        groupId: 0
-        mountPoints:
-          - enableTLS: false
-            mountDir: /data
-            serverAddr: 0b83a49991-uqs5.cn-hangzhou.nas.aliyuncs.com:/mc/
-        userId: 0
       role: acs:ram::1069036459691773:role/ecimanagerrole
       runtime: custom.debian12
       timeout: 60
