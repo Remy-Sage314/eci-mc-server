@@ -18,4 +18,5 @@ ENV PYTHONPATH="/opt/mc/scripts/:${PYTHONPATH}"
 RUN pip install alibabacloud-eci20180808 Flask rcon
 COPY src /opt/mc/scripts/
 WORKDIR /opt/mc/scripts/
+ENV IsCloud = 1
 CMD python /opt/mc/scripts/eci/daemon.py && python /opt/mc/scripts/eci/looping.py

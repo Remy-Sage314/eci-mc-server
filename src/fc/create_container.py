@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 import alibabacloud_eci20180808.client
 from alibabacloud_eci20180808.models import (
     CreateContainerGroupRequest, CreateContainerGroupRequestContainer,
@@ -43,7 +44,7 @@ create_request = CreateContainerGroupRequest(
     spot_strategy='SpotWithPriceLimit',
     spot_price_limit=0.4,
     auto_create_eip=True,
-    eip_bandwidth=5,
+    eip_bandwidth=8,
     eip_isp='BGP',
     container=[container],
     volume=[volume],
