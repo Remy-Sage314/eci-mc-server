@@ -3,4 +3,4 @@ pip install --target layer/python -r fc_requirements.txt -U
 s logs --tail
 curl https://eci-mc-server-rlzbgtclfo.cn-hangzhou.fcapp.run
 
-from alibabacloud_alidns20150109 import models as alidns_20150109_models\r\nMemoryError"}
+docker build -t registry.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest . && docker push registry.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest

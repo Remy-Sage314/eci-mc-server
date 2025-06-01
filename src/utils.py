@@ -1,3 +1,4 @@
+# -*- coding: utf-8 -*-
 from time import sleep
 
 from rcon.source import Client
@@ -57,7 +58,7 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
             raise ValueError('Unknown client type')
 
 
-def setup_dns(ip):
+def update_dns(ip):
     # dynv6
     if EnableDYNV6:
         status = requests.get(f'http://dynv6.com/api/update?hostname={DYNV6Domain}&token={DYNV6Token}&ipv4={ip}')
