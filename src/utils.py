@@ -1,4 +1,5 @@
 # -*- coding: utf-8 -*-
+import logging
 from time import sleep
 
 from rcon.source import Client
@@ -58,12 +59,12 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
             raise ValueError('Unknown client type')
 
 
-def update_dns(ip):
+def update_dns(ip, logger: logging.Logger):
     # dynv6
     if EnableDYNV6:
         status = requests.get(f'http://dynv6.com/api/update?hostname={DYNV6Domain}&token={DYNV6Token}&ipv4={ip}')
         if status.status_code == 200:
-            print('dynv6 update successfully')
+            logger.debug('dynv6 dns update successfully')
 
     # aliyun
     if EnableAliyunDNS:
@@ -71,7 +72,7 @@ def update_dns(ip):
             from alibabacloud_sts20150401 import models as sts_models
             sts_client = get_ali_client('sts')
             assumerole_request = sts_models.AssumeRoleRequest(
-                role_session_name='Eci',
+                role_session_name='mc_ddns',
                 role_arn=DnsRoleARN
             )
             res = sts_client.assume_role(assumerole_request).body.credentials
@@ -80,13 +81,13 @@ def update_dns(ip):
             dns_client = get_ali_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
             update_domain_record_request = dns_models.UpdateDomainRecordRequest(
                 record_id=DnsRecordID,
-                rr='@',
+                rr='mc',
                 value=ip,
                 type='A'
             )
             status = dns_client.update_domain_record(update_domain_record_request).status_code
         except Exception as e:
-            print(e)
+            logger.warning(e)
         else:
             if status == 200:
-                print('aliyun dns update successfully')
+                logger.debug('aliyun dns update successfully')

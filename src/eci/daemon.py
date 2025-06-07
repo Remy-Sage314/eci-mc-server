@@ -1,11 +1,10 @@
 # -*- coding: utf-8 -*-
-import logging
 import shlex
+import socket
 import subprocess
 import threading
 import time
 from datetime import datetime, timezone
-import socket
 
 import rcon
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest, DescribeContainerGroupsRequest
@@ -76,7 +75,6 @@ def change_auto_stop():
 def query_eci_status():
     describe_request = DescribeContainerGroupsRequest(region_id=RegionId, container_group_ids=f'["{instance_id}"]',
                                                       with_event=True)
-    warnings = []
     while True:
         response = eci_client.describe_container_groups(describe_request)
         logger.debug(response.body.to_map())
@@ -90,9 +88,7 @@ def query_eci_status():
                 stop()
                 return
             elif event.type == 'Warning':  # SpotToBeReleased 属于 Warning
-                if event.message not in warnings:
-                    warnings.append(event.message)
-                    logger.warning(f'实例警告：{event.message}')
+                logger.debug(f'实例警告：{event.message}')
         time.sleep(30)
 
 
@@ -105,7 +101,7 @@ def auto_stop():
         except (rcon.exceptions.EmptyResponse, BrokenPipeError):  # rcon崩了
             check_response = check()
             if 'stopped' in check_response:
-                logger.warning(f'MC的java进程已退出（{check}），实例即将删除')
+                logger.warning(f'MC的java进程已退出，实例即将删除')
                 delete_container_group()
             else:
                 logger.warning('rcon异常，自动停止失效，MC的java进程仍在运行，请手动介入')
@@ -126,10 +122,11 @@ def auto_stop():
 
 if __name__ == "__main__":
         send_message_handler = SendMessageHandler(level=logging.INFO)
-        send_message_handler.setFormatter(logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s"))
+        # send_message_handler.setFormatter(logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s"))
         logger = logging.getLogger('send_messages')
         logger.addHandler(send_message_handler)
         logger.setLevel(logging.DEBUG)
+        logger.info('启动中...')
 
         # 启动mc
         mc_process = subprocess.Popen(shlex.split(Command), cwd=WorkingDir, shell=False,
@@ -138,8 +135,8 @@ if __name__ == "__main__":
         if IsCloud:
             # 更新dns
             ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
-            logger.info(f'实例IP：{ip}')
-            update_dns(ip)
+            logger.debug(f'实例IP：{ip}')
+            update_dns(ip, logger)
 
             instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
             eci_client = get_ali_client('eci')
