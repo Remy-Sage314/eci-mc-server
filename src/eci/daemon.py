@@ -31,7 +31,7 @@ def stop_and_wait():
             time.sleep(5)
             n += 1
         else:
-            logger.info("MC服务器进程已退出")
+            logger.info("MC服务器进程已退出喵～")
             delete_container_group()
             return
         if n % 8 == 0 and n <= 16:
@@ -65,10 +65,10 @@ def change_auto_stop():
     global is_auto_stop
     is_auto_stop = not is_auto_stop
     if is_auto_stop:
-        logger.info('已开启自动停止')
+        logger.info('已开启自动停止喵～')
         return '已开启自动停止'
     else:
-        logger.info('已关闭自动停止')
+        logger.info('已关闭自动停止喵～')
         return '已关闭自动停止'
 
 
@@ -84,7 +84,7 @@ def query_eci_status():
                 break
 
             if event.reason == 'SpotToBeReleased':
-                logger.warning('ECI实例即将过期:' + event.message)
+                logger.warning('ECI实例即将过期喵～:' + event.message)
                 stop()
                 return
             elif event.type == 'Warning':  # SpotToBeReleased 属于 Warning
@@ -101,10 +101,10 @@ def auto_stop():
         except (rcon.exceptions.EmptyResponse, BrokenPipeError):  # rcon崩了
             check_response = check()
             if 'stopped' in check_response:
-                logger.warning(f'MC的java进程已退出，实例即将删除')
+                logger.warning(f'MC的java进程已退出，实例即将删除喵～')
                 delete_container_group()
             else:
-                logger.warning('rcon异常，自动停止失效，MC的java进程仍在运行，请手动介入')
+                logger.warning('rcon异常，自动停止失效，MC的java进程仍在运行，请手动介入喵～')
             return
         else:
             if is_not_anyone_online:
@@ -126,7 +126,7 @@ if __name__ == "__main__":
         logger = logging.getLogger('send_messages')
         logger.addHandler(send_message_handler)
         logger.setLevel(logging.DEBUG)
-        logger.info('启动中...')
+        logger.info('启动中喵～')
 
         # 启动mc
         mc_process = subprocess.Popen(shlex.split(Command), cwd=WorkingDir, shell=False,
@@ -144,7 +144,7 @@ if __name__ == "__main__":
 
         is_auto_stop = True
         rcon_client = get_rcon_client()
-        logger.info('MC已启动')
+        logger.info('MC已启动喵～')
 
         threading.Thread(target=auto_stop).start()
         thread_stop = threading.Thread(target=stop_and_wait)

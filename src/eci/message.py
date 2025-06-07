@@ -45,5 +45,7 @@ def send_dingtalk_message(message):
 class SendMessageHandler(Handler):
     def emit(self, record):
         message = self.format(record)
-        print(message)
         send_dingtalk_message(message)
+        # just for Li
+        requests.get('http://xdroid.net/api/message?c=mc&u=mc.lizihenmeng.cn',
+                     params={'t':  message, 'k': PushApiK})
