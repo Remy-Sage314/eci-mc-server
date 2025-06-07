@@ -1,4 +1,3 @@
 Flask
 rcon
-requests
 alibabacloud-eci20180808
