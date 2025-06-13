@@ -87,7 +87,8 @@ def update_dns(ip, logger: logging.Logger):
             )
             status = dns_client.update_domain_record(update_domain_record_request).status_code
         except Exception as e:
-            logger.warning(e)
+            if 'LastOperationNotFinished' not in str(e):
+                logger.warning(e)
         else:
             if status == 200:
                 logger.debug('aliyun dns update successfully')

@@ -135,7 +135,7 @@ if __name__ == "__main__":
         if IsCloud:
             # 更新dns
             ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
-            logger.debug(f'实例IP：{ip}')
+            logger.info(f'实例IP： {ip}\n面板地址： http://{ip}:10086\n调整是否自动停止： http://{ip}:25585/change_auto_stop')
             update_dns(ip, logger)
 
             instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
