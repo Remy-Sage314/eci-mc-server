@@ -27,5 +27,5 @@ def stop():
     ...
 
 if __name__ == '__main__':
-    app.logger.setLevel(logging.DEBUG)
+    app.logger.info(ACCESS_KEY_ID, ACCESS_KEY_SECRET,  SECURITY_TOKEN)
     app.run(host='0.0.0.0', port=9000, debug=False)
