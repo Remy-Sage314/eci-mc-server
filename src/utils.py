@@ -5,10 +5,11 @@ from time import sleep
 from rcon.source import Client
 import requests
 
-from config import *
+from config import get_config
+Conf = get_config()
 
 def get_rcon_client():
-    client = Client('127.0.0.1', 25575, passwd=RconPassword)
+    client = Client('127.0.0.1', 25575, passwd=Conf.RconPassword)
     while True:
         try:
             client.__enter__()
@@ -26,7 +27,7 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
             access_key_id=ak_id,
             access_key_secret=ak_secret,
             security_token=security_token,
-            region_id=RegionId,
+            region_id=Conf.RegionId,
         )
     else:
         from alibabacloud_credentials.client import Client as CredClient
@@ -38,22 +39,22 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
         credentials_client = CredClient(credentials_config)
         config = open_api_models.Config(
             credential=credentials_client,
-            region_id=RegionId,
+            region_id=Conf.RegionId,
         )
 
 
     match client_type:
         case 'eci':
             from alibabacloud_eci20180808.client import Client as Eci20180808Client
-            config.endpoint = ECIEndPoint
+            config.endpoint = Conf.ECIEndPoint
             return Eci20180808Client(config)
         case 'sts':
             from alibabacloud_sts20150401.client import Client as Sts20150401Client
-            config.endpoint = STSEndPoint
+            config.endpoint = Conf.STSEndPoint
             return Sts20150401Client(config)
         case 'dns':
             from alibabacloud_alidns20150109.client import Client as DNSClient
-            config.endpoint = DNSEndPoint
+            config.endpoint = Conf.DNSEndPoint
             return DNSClient(config)
         case _:
             raise ValueError('Unknown client type')
@@ -61,26 +62,26 @@ def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None)
 
 def update_dns(ip, logger: logging.Logger):
     # dynv6
-    if EnableDYNV6:
-        status = requests.get(f'http://dynv6.com/api/update?hostname={DYNV6Domain}&token={DYNV6Token}&ipv4={ip}')
+    if Conf.EnableDYNV6:
+        status = requests.get(f'http://dynv6.com/api/update?hostname={Conf.DYNV6Domain}&token={Conf.DYNV6Token}&ipv4={ip}')
         if status.status_code == 200:
             logger.debug('dynv6 dns update successfully')
 
     # aliyun
-    if EnableAliyunDNS:
+    if Conf.EnableAliyunDNS:
         try:
             from alibabacloud_sts20150401 import models as sts_models
             sts_client = get_ali_client('sts')
             assumerole_request = sts_models.AssumeRoleRequest(
                 role_session_name='mc_ddns',
-                role_arn=DnsRoleARN
+                role_arn=Conf.DnsRoleARN
             )
             res = sts_client.assume_role(assumerole_request).body.credentials
 
             from alibabacloud_alidns20150109 import models as dns_models
             dns_client = get_ali_client('dns', res.access_key_id, res.access_key_secret, res.security_token)
             update_domain_record_request = dns_models.UpdateDomainRecordRequest(
-                record_id=DnsRecordID,
+                record_id=Conf.DnsRecordID,
                 rr='mc',
                 value=ip,
                 type='A'

@@ -27,7 +27,6 @@ RUN sed -i -e "s#ORIGINAL_USERNAME=.*#ORIGINAL_USERNAME=mc123#g" /usr/local/bin/
     alibabacloud-eci20180808 Flask rcon alibabacloud-sts20150401 alibabacloud-alidns20150109
 
 ENV PYTHONPATH="/opt/mc/scripts/"
-ENV IsCloud=1
 
 COPY src /opt/mc/scripts/
 WORKDIR /opt/mc/scripts/
