@@ -5,6 +5,7 @@ import subprocess
 import threading
 import time
 from datetime import datetime, timezone
+from os import environ
 
 import rcon
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest, DescribeContainerGroupsRequest
@@ -12,6 +13,7 @@ from flask import Flask, Response
 
 from utils import *
 from message import SendMessageHandler
+from config import save_config
 
 app = Flask(__name__)
 
@@ -48,7 +50,7 @@ def stop():
 
 @app.route('/delete')
 def delete_container_group():
-    delete_request = DeleteContainerGroupRequest(region_id=RegionId, container_group_id=instance_id)
+    delete_request = DeleteContainerGroupRequest(region_id=Conf.RegionId, container_group_id=instance_id)
     return str(eci_client.delete_container_group(delete_request).status_code)
 
 
@@ -73,7 +75,7 @@ def change_auto_stop():
 
 
 def query_eci_status():
-    describe_request = DescribeContainerGroupsRequest(region_id=RegionId, container_group_ids=f'["{instance_id}"]',
+    describe_request = DescribeContainerGroupsRequest(region_id=Conf.RegionId, container_group_ids=f'["{instance_id}"]',
                                                       with_event=True)
     while True:
         response = eci_client.describe_container_groups(describe_request)
@@ -128,11 +130,17 @@ if __name__ == "__main__":
         logger.setLevel(logging.DEBUG)
         logger.info('启动中喵～')
 
+        v = Conf.Versions[Conf.DefaultVersion]
+        if environ['mc_version_to_run']:
+            Conf.DefaultVersion = environ['mc_version_to_run']
+            save_config(Conf)
+            v = environ['mc_version_to_run']
+        version = Conf.Versions[v]
         # 启动mc
-        mc_process = subprocess.Popen(shlex.split(Command), cwd=WorkingDir, shell=False,
+        mc_process = subprocess.Popen(shlex.split(version.Command), cwd=version.WorkingDir, shell=False,
                              stderr=subprocess.DEVNULL, stdout=subprocess.DEVNULL,
                              stdin=subprocess.DEVNULL)
-        if IsCloud:
+        if Conf.IsCloud:
             # 更新dns
             ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
             logger.info(f'实例IP： {ip}\n面板地址： http://{ip}:10086\n调整是否自动停止： http://{ip}:25585/change_auto_stop')

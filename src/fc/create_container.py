@@ -5,7 +5,7 @@ from alibabacloud_eci20180808.models import (
     CreateContainerGroupRequestContainerVolumeMount,
     CreateContainerGroupRequestVolume,
     CreateContainerGroupRequestVolumeNFSVolume,
-    DescribeContainerGroupsRequest
+    DescribeContainerGroupsRequest, CreateContainerGroupRequestContainerEnvironmentVar,
 )
 
 volume_mount = CreateContainerGroupRequestContainerVolumeMount(
@@ -14,13 +14,17 @@ volume_mount = CreateContainerGroupRequestContainerVolumeMount(
     read_only=False,
     name='nas-mc'
 )
+environment_var = CreateContainerGroupRequestContainerEnvironmentVar(
+    key='mc_version_to_run'
+)
 container = CreateContainerGroupRequestContainer(
     volume_mount=[volume_mount],
     image_pull_policy='IfNotPresent',
     name='container-mc',
     image='registry-vpc.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest',
     cpu=2,
-    memory=8
+    memory=8,
+    environment_var=[environment_var]
 )
 nfs_volume = CreateContainerGroupRequestVolumeNFSVolume(
     path='/',
@@ -62,7 +66,8 @@ def query_exists(client: alibabacloud_eci20180808.client.Client):
     return False
 
 
-def create_container_group(client: alibabacloud_eci20180808.client.Client, force=False):
+def create_container_group(client: alibabacloud_eci20180808.client.Client, version='', force=False):
+    environment_var.value = version
     if not query_exists(client) or force:
         response = client.create_container_group(create_request)
         return response.status_code

@@ -16,9 +16,10 @@ SECURITY_TOKEN = environ.get('ALIBABA_CLOUD_SECURITY_TOKEN')
 @app.route('/start')
 def start():
     force = request.args.get('force')
+    version = request.args.get('version')
 
     client = utils.get_ali_client('eci', ACCESS_KEY_ID, ACCESS_KEY_SECRET, SECURITY_TOKEN)
-    status = create_container.create_container_group(client, force)
+    status = create_container.create_container_group(client, version, force)
     return Response(status=status)
 
 @app.route('/stop')
