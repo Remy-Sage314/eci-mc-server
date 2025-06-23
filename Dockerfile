@@ -24,7 +24,7 @@ RUN sed -i -e "s#ORIGINAL_USERNAME=.*#ORIGINAL_USERNAME=mc123#g" /usr/local/bin/
     python3.12 -m ensurepip --upgrade && \
     python3.12 -m pip install --ignore-installed blinker && \
     python3.12 -m pip install -i https://pypi.tuna.tsinghua.edu.cn/simple \
-    alibabacloud-eci20180808 Flask rcon alibabacloud-sts20150401 alibabacloud-alidns20150109
+    alibabacloud-eci20180808 Flask rcon alibabacloud-sts20150401 alibabacloud-alidns20150109 pydantic
 
 ENV PYTHONPATH="/opt/mc/scripts/"
 

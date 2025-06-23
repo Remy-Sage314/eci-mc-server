@@ -123,14 +123,14 @@ def auto_stop():
 
 
 if __name__ == "__main__":
-        send_message_handler = SendMessageHandler(level=logging.INFO)
+        send_message_handler = SendMessageHandler(config=Conf, level=logging.INFO)
         # send_message_handler.setFormatter(logging.Formatter("[%(asctime)s] %(levelname)s: %(message)s"))
         logger = logging.getLogger('send_messages')
         logger.addHandler(send_message_handler)
         logger.setLevel(logging.DEBUG)
-        logger.info('启动中喵～')
+        # logger.info('启动中喵～')
 
-        v = Conf.Versions[Conf.DefaultVersion]
+        v = Conf.DefaultVersion
         if environ['mc_version_to_run']:
             Conf.DefaultVersion = environ['mc_version_to_run']
             save_config(Conf)
@@ -143,7 +143,8 @@ if __name__ == "__main__":
         if Conf.IsCloud:
             # 更新dns
             ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
-            logger.info(f'实例IP： {ip}\n面板地址： http://{ip}:10086\n调整是否自动停止： http://{ip}:25585/change_auto_stop')
+            logger.info(f'正在运行的版本： {v}\n实例IP： {ip}\n面板地址： http://{ip}:10086\n'
+                        f'调整是否自动停止： http://{ip}:25585/change_auto_stop\n')
             update_dns(ip, logger)
 
             instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text

@@ -1,3 +1,4 @@
 Flask
 rcon
 alibabacloud-eci20180808
+pydantic

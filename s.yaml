@@ -28,7 +28,7 @@ resources:
       instanceConcurrency: 10
       internetAccess: false
       layers:
-        - acs:fc:cn-hangzhou:1069036459691773:layers/dependency-layer/versions/10
+        - acs:fc:cn-hangzhou:1069036459691773:layers/dependency-layer/versions/11
         - acs:fc:cn-hangzhou:official:layers/Python312/versions/1
       logConfig:
         enableInstanceMetrics: true
