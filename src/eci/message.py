@@ -9,7 +9,6 @@ from logging import Handler
 
 import requests
 
-from config import *
 
 def get_dingtalk_sign(timestamp=None):
     if not timestamp:
@@ -41,8 +40,13 @@ def send_dingtalk_message(message):
         return requests.post(url, headers=headers, data=json.dumps(data)).status_code
     return 200
 
-
+EnableDingtalk, PushApiK, DingtalkSecret, RobotUrl = '', '', '', ''
 class SendMessageHandler(Handler):
+    def __init__(self, config, level=0):
+        super().__init__(level)
+        global EnableDingtalk, PushApiK, DingtalkSecret, RobotUrl
+        EnableDingtalk, PushApiK, DingtalkSecret, RobotUrl = config.EnableDingtalk, config.PushApiK, config.DingtalkSecret, config.RobotUrl
+
     def emit(self, record):
         message = self.format(record)
         send_dingtalk_message(message)

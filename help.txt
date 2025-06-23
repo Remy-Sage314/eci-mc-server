@@ -4,3 +4,4 @@ s logs --tail
 curl https://eci-mc-server-rlzbgtclfo.cn-hangzhou.fcapp.run
 
 docker build -t registry.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest . && docker push registry.cn-hangzhou.aliyuncs.com/bmzhk/mc:latest
+nas ip 172.30.183.247
