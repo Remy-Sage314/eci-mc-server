@@ -9,8 +9,8 @@ from alibabacloud_eci20180808.models import (
 )
 
 volume_mount = CreateContainerGroupRequestContainerVolumeMount(
-    mount_path='/opt/mc/server',
-    sub_path='mc/server',
+    mount_path='/mc',
+    sub_path='mc/',
     read_only=False,
     name='nas-mc'
 )

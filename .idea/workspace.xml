@@ -9,11 +9,7 @@
   <component name="ChangeListManager">
     <list default="true" id="8e3c1bd9-1564-4331-b6d8-9d12664699fd" name="更改" comment="改了">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fc_requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fc_requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/config.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/config.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/eci/daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/eci/daemon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/eci/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/eci/message.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fc/create_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fc/create_container.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -31,7 +27,7 @@
 }</component>
   <component name="GithubPullRequestsUISettings">{
   &quot;selectedUrlAndAccountId&quot;: {
-    &quot;url&quot;: &quot;https://github.com/wddcxy/mc_eci_system.git&quot;,
+    &quot;url&quot;: &quot;https://github.com/Remy-Sage314/eci-mc-server.git&quot;,
     &quot;accountId&quot;: &quot;05e69c99-8420-4341-b8bf-6e0eb12961df&quot;
   }
 }</component>
@@ -43,20 +39,20 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "Docker.Docker 镜像.executor": "Run",
-    "Docker.Dockerfile.executor": "Run",
-    "ModuleVcsDetector.initialDetectionPerformed": "true",
-    "Python.daemon.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "RunOnceActivity.git.unshallow": "true",
-    "git-widget-placeholder": "master",
-    "last_opened_file_path": "/home/msy/workspace/py/eci-mc-server",
-    "run.code.analysis.last.selected.profile": "pProject Default",
-    "settings.editor.selected.configurable": "com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;Docker.Docker 镜像.executor&quot;: &quot;Run&quot;,
+    &quot;Docker.Dockerfile.executor&quot;: &quot;Run&quot;,
+    &quot;ModuleVcsDetector.initialDetectionPerformed&quot;: &quot;true&quot;,
+    &quot;Python.daemon.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;main&quot;,
+    &quot;last_opened_file_path&quot;: &quot;/home/msy/workspace/py/eci-mc-server&quot;,
+    &quot;run.code.analysis.last.selected.profile&quot;: &quot;pProject Default&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;com.jetbrains.python.configuration.PyActiveSdkModuleConfigurable&quot;
   }
-}]]></component>
+}</component>
   <component name="RunManager" selected="Docker.Dockerfile">
     <configuration name="daemon" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="eci-mc-server" />
@@ -81,7 +77,9 @@
       <method v="2" />
     </configuration>
     <configuration default="true" type="docker-deploy" factoryName="docker-image" temporary="true">
-      <deployment type="docker-image" />
+      <deployment type="docker-image">
+        <settings />
+      </deployment>
       <method v="2" />
     </configuration>
     <configuration name="Docker 镜像" type="docker-deploy" factoryName="docker-image" temporary="true" server-name="Docker">
@@ -142,6 +140,27 @@
     </task>
     <option name="localTasksCounter" value="2" />
     <servers />
+  </component>
+  <component name="Vcs.Log.Tabs.Properties">
+    <option name="OPEN_GENERIC_TABS">
+      <map>
+        <entry key="3be83e38-fd3a-4813-980c-e0d0fa181e16" value="EDITOR" />
+      </map>
+    </option>
+    <option name="TAB_STATES">
+      <map>
+        <entry key="3be83e38-fd3a-4813-980c-e0d0fa181e16">
+          <value>
+            <State />
+          </value>
+        </entry>
+        <entry key="MAIN">
+          <value>
+            <State />
+          </value>
+        </entry>
+      </map>
+    </option>
   </component>
   <component name="VcsManagerConfiguration">
     <MESSAGE value="改了" />

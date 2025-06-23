@@ -1,5 +1,4 @@
 # -*- coding: utf-8 -*-
-import logging
 from os import environ
 
 from flask import request, Flask, Response

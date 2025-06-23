@@ -10,8 +10,8 @@ import rcon
 from alibabacloud_eci20180808.models import DeleteContainerGroupRequest, DescribeContainerGroupsRequest
 from flask import Flask, Response
 
-from message import SendMessageHandler
 from utils import *
+from message import SendMessageHandler
 
 app = Flask(__name__)
 
