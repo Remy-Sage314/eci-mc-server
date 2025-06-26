@@ -38,21 +38,25 @@ volume = CreateContainerGroupRequestVolume(
 )
 create_request = CreateContainerGroupRequest(
     region_id='cn-hangzhou',
-    zone_id='cn-hangzhou-k',
+    # zone_id='cn-hangzhou-k',
     security_group_id='sg-bp17z1tqsnklf5c5n7d0',
-    v_switch_id='vsw-bp19befc46buz5uuxg40i',
+    v_switch_id='vsw-bp19befc46buz5uuxg40i,vsw-bp1368kcz5ov5jpb5kg29',
+    schedule_strategy='VSwitchOrdered',
     container_group_name='mc-container-group',
     restart_policy='Never',
-    instance_type='ecs.g8ae.large,ecs.g8a.large,ecs.g8i.large',
+    instance_type='ecs.g6a.large,ecs.g7a.large',
     auto_match_image_cache=True,
     spot_strategy='SpotWithPriceLimit',
     spot_price_limit=0.4,
-    auto_create_eip=True,
-    eip_bandwidth=8,
-    eip_isp='BGP',
+    auto_create_eip=False,
+    # eip_bandwidth=8,
+    # eip_isp='BGP',
+    ipv_6address_count=1,
+    ipv_6gateway_bandwidth_enable=True,
+    ipv_6gateway_bandwidth=5,
     container=[container],
     volume=[volume],
-    spot_duration=1,
+    spot_duration=0,
     ram_role_name='EciManagerRole',
     dry_run=False  # 是否预检
 )
@@ -61,7 +65,7 @@ query_request = DescribeContainerGroupsRequest(region_id='cn-hangzhou', containe
 def query_exists(client: alibabacloud_eci20180808.client.Client):
     response = client.describe_container_groups(query_request)
     for container_group in response.body.container_groups:
-        if container_group.status  == 'Running' or container_group.status  == 'Pending':
+        if container_group.status in ['Running', 'Pending', 'Scheduling']:
             return True
     return False
 
