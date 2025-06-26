@@ -1,9 +1,11 @@
 # -*- coding: utf-8 -*-
 import logging
 from time import sleep
+import traceback
 
 from rcon.source import Client
 import requests
+from Tea.exceptions import UnretryableException, TeaException
 
 from config import get_config
 Conf = get_config()
@@ -20,7 +22,7 @@ def get_rcon_client():
 
 
 
-def get_ali_client(client_type, ak_id=None, ak_secret=None, security_token=None):
+def get_ali_client(client_type: str, ak_id=None, ak_secret=None, security_token=None):
     from alibabacloud_tea_openapi import models as open_api_models
     if ak_id and ak_secret:
         config = open_api_models.Config(
@@ -84,7 +86,7 @@ def update_dns(ip, logger: logging.Logger):
                 record_id=Conf.DnsRecordID,
                 rr='mc',
                 value=ip,
-                type='A'
+                type='AAAA'
             )
             status = dns_client.update_domain_record(update_domain_record_request).status_code
         except Exception as e:
@@ -93,3 +95,17 @@ def update_dns(ip, logger: logging.Logger):
         else:
             if status == 200:
                 logger.debug('aliyun dns update successfully')
+
+class HandleAliException:
+    def __init__(self, logger):
+        self.logger = logger
+
+    @staticmethod
+    def __enter__():
+        return
+
+    def __exit__(self, exc_type, exc_val, exc_tb):
+        if isinstance(exc_val, (TeaException, UnretryableException)):
+            self.logger.warning(f"Exception Type: {exc_type}, Exception Value: {exc_val},"
+                                f" Detailed Traceback: {"".join(traceback.format_tb(exc_tb))}")
+        return True

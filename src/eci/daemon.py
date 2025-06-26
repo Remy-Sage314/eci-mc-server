@@ -51,7 +51,8 @@ def stop():
 @app.route('/delete')
 def delete_container_group():
     delete_request = DeleteContainerGroupRequest(region_id=Conf.RegionId, container_group_id=instance_id)
-    return str(eci_client.delete_container_group(delete_request).status_code)
+    with HandleAliException(logger):
+        return str(eci_client.delete_container_group(delete_request).status_code)
 
 
 @app.route('/check')
@@ -78,20 +79,21 @@ def query_eci_status():
     describe_request = DescribeContainerGroupsRequest(region_id=Conf.RegionId, container_group_ids=f'["{instance_id}"]',
                                                       with_event=True)
     while True:
-        response = eci_client.describe_container_groups(describe_request)
-        logger.debug(response.body.to_map())
-        for event in response.body.container_groups[0].events:
-            dt = datetime.fromisoformat(event.first_timestamp)
-            if (datetime.now(tz=timezone.utc) - dt).seconds > 60:  # 距现在超1分钟的事件跳过
-                break
+        with HandleAliException(logger):
+            response = eci_client.describe_container_groups(describe_request)
+            logger.debug(response.body.to_map())
+            for event in response.body.container_groups[0].events:
+                dt = datetime.fromisoformat(event.first_timestamp)
+                if (datetime.now(tz=timezone.utc) - dt).seconds > 60:  # 距现在超1分钟的事件跳过
+                    break
 
-            if event.reason == 'SpotToBeReleased':
-                logger.warning('ECI实例即将过期喵～:' + event.message)
-                stop()
-                return
-            elif event.type == 'Warning':  # SpotToBeReleased 属于 Warning
-                logger.debug(f'实例警告：{event.message}')
-        time.sleep(30)
+                if event.reason == 'SpotToBeReleased':
+                    logger.warning('ECI实例即将过期喵～:' + event.message)
+                    stop()
+                    return
+                elif event.type == 'Warning':  # SpotToBeReleased 属于 Warning
+                    logger.debug(f'实例警告：{event.message}')
+        time.sleep(50)
 
 
 def auto_stop():
@@ -142,10 +144,15 @@ if __name__ == "__main__":
                              stdin=subprocess.DEVNULL)
         if Conf.IsCloud:
             # 更新dns
-            ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
+            # ipv4
+            # ip = requests.get('http://100.100.100.200/latest/meta-data/eipv4').text
+            # ipv6
+            mac = requests.get('http://100.100.100.200/latest/meta-data/mac').text
+            ip = requests.get(f'http://100.100.100.200/latest/meta-data/network/interfaces/macs/{mac}/ipv6s').text
             logger.info(f'正在运行的版本： {v}\n实例IP： {ip}\n面板地址： http://{ip}:10086\n'
                         f'调整是否自动停止： http://{ip}:25585/change_auto_stop\n')
-            update_dns(ip, logger)
+            # 去除括号
+            update_dns(ip[1:-1], logger)
 
             instance_id = requests.get('http://100.100.100.200/latest/meta-data/instance-id').text
             eci_client = get_ali_client('eci')
