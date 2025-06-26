@@ -51,5 +51,8 @@ class SendMessageHandler(Handler):
         message = self.format(record)
         send_dingtalk_message(message)
         # just for Li
-        requests.get('http://xdroid.net/api/message?c=mc&u=mc.lizihenmeng.cn',
+        try:
+            requests.get('http://xdroid.net/api/message?c=mc&u=mc.lizihenmeng.cn',
                      params={'t':  message, 'k': PushApiK})
+        except requests.exceptions.ConnectionError:
+            pass
