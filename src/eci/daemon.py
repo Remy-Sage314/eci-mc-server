@@ -98,6 +98,7 @@ def query_eci_status():
 
 def auto_stop():
     n = 0
+    time.sleep(1200) # 添加缓冲时间
     while True:
         try:
             is_not_anyone_online = rcon_client.run('list').startswith('There are 0 of a max of')
@@ -149,7 +150,7 @@ if __name__ == "__main__":
             # ipv6
             mac = requests.get('http://100.100.100.200/latest/meta-data/mac').text
             ip = requests.get(f'http://100.100.100.200/latest/meta-data/network/interfaces/macs/{mac}/ipv6s').text
-            logger.info(f'正在运行的版本： {v}\n实例IP： {ip}\n面板地址： http://{ip}:10086\n'
+            logger.info(f'正在运行的版本： {v}\n实例IP： {ip}\n'
                         f'调整是否自动停止： http://{ip}:25585/change_auto_stop\n')
             # 去除括号
             update_dns(ip[1:-1], logger)
@@ -166,4 +167,4 @@ if __name__ == "__main__":
         thread_stop = threading.Thread(target=stop_and_wait)
 
 
-        app.run(port=25585, host="0.0.0.0", debug=False)
+        app.run(port=25585, host="::", debug=False)

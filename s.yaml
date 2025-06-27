@@ -57,3 +57,10 @@ resources:
               - POST
             authType: anonymous
             disableURLInternet: false
+      nasConfig:
+        groupId: 0
+        mountPoints:
+          - enableTLS: false
+            serverAddr: 0b83a49991-uqs5.cn-hangzhou.nas.aliyuncs.com:/mc
+            mountDir: /mc
+        userId: 0
