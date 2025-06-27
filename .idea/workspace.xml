@@ -7,14 +7,12 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8e3c1bd9-1564-4331-b6d8-9d12664699fd" name="更改" comment="删除部分敏感数据">
+    <list default="true" id="8e3c1bd9-1564-4331-b6d8-9d12664699fd" name="更改" comment="增加异常处理">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/Dockerfile" beforeDir="false" afterPath="$PROJECT_DIR$/Dockerfile" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/fc_requirements.txt" beforeDir="false" afterPath="$PROJECT_DIR$/fc_requirements.txt" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/help.txt" beforeDir="false" afterPath="$PROJECT_DIR$/help.txt" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/s.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/s.yaml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/eci/daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/eci/daemon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/eci/message.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/eci/message.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/fc/create_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fc/create_container.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -52,6 +50,7 @@
     &quot;Python.app.executor&quot;: &quot;Run&quot;,
     &quot;Python.config.executor&quot;: &quot;Run&quot;,
     &quot;Python.daemon.executor&quot;: &quot;Run&quot;,
+    &quot;Python.utils.executor&quot;: &quot;Run&quot;,
     &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
     &quot;RunOnceActivity.git.unshallow&quot;: &quot;true&quot;,
     &quot;git-widget-placeholder&quot;: &quot;main&quot;,
@@ -65,7 +64,7 @@
       <recent name="$PROJECT_DIR$/src" />
     </key>
   </component>
-  <component name="RunManager" selected="Python.app">
+  <component name="RunManager" selected="Python.utils">
     <configuration name="app" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="eci-mc-server" />
       <option name="ENV_FILES" value="" />
@@ -110,7 +109,7 @@
       <option name="INPUT_FILE" value="" />
       <method v="2" />
     </configuration>
-    <configuration name="daemon" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+    <configuration name="utils" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
       <module name="eci-mc-server" />
       <option name="ENV_FILES" value="" />
       <option name="INTERPRETER_OPTIONS" value="" />
@@ -119,11 +118,11 @@
         <env name="PYTHONUNBUFFERED" value="1" />
       </envs>
       <option name="SDK_HOME" value="" />
-      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/eci" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src" />
       <option name="IS_MODULE_SDK" value="true" />
       <option name="ADD_CONTENT_ROOTS" value="true" />
       <option name="ADD_SOURCE_ROOTS" value="true" />
-      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/eci/daemon.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/utils.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -165,11 +164,11 @@
     </configuration>
     <recent_temporary>
       <list>
+        <item itemvalue="Python.utils" />
         <item itemvalue="Python.app" />
         <item itemvalue="Python.config" />
         <item itemvalue="Docker.Dockerfile" />
         <item itemvalue="Docker.Docker 镜像" />
-        <item itemvalue="Python.daemon" />
       </list>
     </recent_temporary>
   </component>
@@ -212,22 +211,44 @@
       <option name="project" value="LOCAL" />
       <updated>1750659842457</updated>
     </task>
-    <option name="localTasksCounter" value="4" />
+    <task id="LOCAL-00004" summary="换成g8ae咯">
+      <option name="closed" value="true" />
+      <created>1750672017239</created>
+      <option name="number" value="00004" />
+      <option name="presentableId" value="LOCAL-00004" />
+      <option name="project" value="LOCAL" />
+      <updated>1750672017239</updated>
+    </task>
+    <task id="LOCAL-00005" summary="撤掉面板">
+      <option name="closed" value="true" />
+      <created>1750919248342</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1750919248342</updated>
+    </task>
+    <task id="LOCAL-00006" summary="更改eci配置">
+      <option name="closed" value="true" />
+      <created>1750919347732</created>
+      <option name="number" value="00006" />
+      <option name="presentableId" value="LOCAL-00006" />
+      <option name="project" value="LOCAL" />
+      <updated>1750919347732</updated>
+    </task>
+    <task id="LOCAL-00007" summary="增加异常处理">
+      <option name="closed" value="true" />
+      <created>1750919373698</created>
+      <option name="number" value="00007" />
+      <option name="presentableId" value="LOCAL-00007" />
+      <option name="project" value="LOCAL" />
+      <updated>1750919373698</updated>
+    </task>
+    <option name="localTasksCounter" value="8" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
-    <option name="OPEN_GENERIC_TABS">
-      <map>
-        <entry key="3be83e38-fd3a-4813-980c-e0d0fa181e16" value="EDITOR" />
-      </map>
-    </option>
     <option name="TAB_STATES">
       <map>
-        <entry key="3be83e38-fd3a-4813-980c-e0d0fa181e16">
-          <value>
-            <State />
-          </value>
-        </entry>
         <entry key="MAIN">
           <value>
             <State />
@@ -240,6 +261,10 @@
     <MESSAGE value="改了" />
     <MESSAGE value="准备大改" />
     <MESSAGE value="删除部分敏感数据" />
-    <option name="LAST_COMMIT_MESSAGE" value="删除部分敏感数据" />
+    <MESSAGE value="换成g8ae咯" />
+    <MESSAGE value="撤掉面板" />
+    <MESSAGE value="更改eci配置" />
+    <MESSAGE value="增加异常处理" />
+    <option name="LAST_COMMIT_MESSAGE" value="增加异常处理" />
   </component>
 </project>
