@@ -7,12 +7,8 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="8e3c1bd9-1564-4331-b6d8-9d12664699fd" name="更改" comment="增加异常处理">
-      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+    <list default="true" id="8e3c1bd9-1564-4331-b6d8-9d12664699fd" name="更改" comment="监听::+取消面板提示+添加缓冲时间+小改ECI配置+小调整">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/s.yaml" beforeDir="false" afterPath="$PROJECT_DIR$/s.yaml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/eci/daemon.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/eci/daemon.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/fc/create_container.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/fc/create_container.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -243,7 +239,15 @@
       <option name="project" value="LOCAL" />
       <updated>1750919373698</updated>
     </task>
-    <option name="localTasksCounter" value="8" />
+    <task id="LOCAL-00008" summary="监听::+取消面板提示+添加缓冲时间+小改ECI配置+小调整">
+      <option name="closed" value="true" />
+      <created>1750994999823</created>
+      <option name="number" value="00008" />
+      <option name="presentableId" value="LOCAL-00008" />
+      <option name="project" value="LOCAL" />
+      <updated>1750994999823</updated>
+    </task>
+    <option name="localTasksCounter" value="9" />
     <servers />
   </component>
   <component name="Vcs.Log.Tabs.Properties">
@@ -265,6 +269,7 @@
     <MESSAGE value="撤掉面板" />
     <MESSAGE value="更改eci配置" />
     <MESSAGE value="增加异常处理" />
-    <option name="LAST_COMMIT_MESSAGE" value="增加异常处理" />
+    <MESSAGE value="监听::+取消面板提示+添加缓冲时间+小改ECI配置+小调整" />
+    <option name="LAST_COMMIT_MESSAGE" value="监听::+取消面板提示+添加缓冲时间+小改ECI配置+小调整" />
   </component>
 </project>
